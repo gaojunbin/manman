@@ -1,0 +1,24 @@
+name: manman
+
+services:
+  manman:
+    build: .
+    container_name: manman
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      # LLM（OpenAI 兼容接口）
+      LLM_BASE_URL: ${LLM_BASE_URL:?请在 .env 中配置 LLM_BASE_URL，例如 https://api.openai.com/v1}
+      LLM_API_KEY: ${LLM_API_KEY:?请在 .env 中配置 LLM_API_KEY}
+      DEFAULT_MODEL: ${DEFAULT_MODEL:-}
+      # 登录账号密码
+      AUTH_USERNAME: ${AUTH_USERNAME:-admin}
+      AUTH_PASSWORD: ${AUTH_PASSWORD:-manman123}
+      # 会话签名密钥（建议设置为随机字符串，否则容器重启后需要重新登录）
+      SESSION_SECRET: ${SESSION_SECRET:-}
+    volumes:
+      - manman-data:/data
+
+volumes:
+  manman-data:
